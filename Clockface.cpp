@@ -8,9 +8,8 @@ unsigned long lastMillisSec = 0;
 
 Pacman *pacman;
 
-Clockface::Clockface(Adafruit_GFX* display) {
-  _display = display;
-  Locator::provide(display);
+Clockface::Clockface(Adafruit_GFX* display) : IClockface(display) {
+  
 }
 
 void Clockface::setup(CWDateTime *dateTime) {
@@ -87,7 +86,7 @@ void Clockface::update()
 
 
 const char* Clockface::weekDayName(int weekday) {
-  strncpy(weekDayTemp, _weekDayWords + (weekday*3), 3);
+  strncpy(weekDayTemp, _weekDayWords + (weekday*4), 4);
   return weekDayTemp;
 }
 
