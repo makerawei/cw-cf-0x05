@@ -14,6 +14,7 @@ Clockface::Clockface(Adafruit_GFX* display) : IClockface(display) {
 
 void Clockface::setup(CWDateTime *dateTime) {
   this->_dateTime = dateTime;
+  this->_dateTime->updateNTP();
   Locator::getDisplay()->setFont(&hourFont);
   randomSeed(dateTime->getMilliseconds() + millis());
   drawMap();
@@ -22,7 +23,7 @@ void Clockface::setup(CWDateTime *dateTime) {
 
 void Clockface::update()
 {
-
+  _dateTime->updateNTP();
   // Seconds blink  
   if ((millis() - lastMillisSec) >= 1000) {
     
@@ -98,7 +99,6 @@ const char* Clockface::monthName(int month) {
 
 
 void Clockface::updateClock() {
-    _dateTime->updateNTP();
     Locator::getDisplay()->fillRect(14, 19, 36, 26, 0x0000);
 
     Locator::getDisplay()->setFont(&Picopixel);
@@ -115,9 +115,9 @@ void Clockface::updateClock() {
     Locator::getDisplay()->setTextColor(0xFE40);
     Locator::getDisplay()->setCursor(15, 28);
     
-    Locator::getDisplay()->print(this->_dateTime->getHour("00"));
+    Locator::getDisplay()->print(this->_dateTime->getHour("%02d"));
     Locator::getDisplay()->print(" ");
-    Locator::getDisplay()->print(this->_dateTime->getMinute("00"));
+    Locator::getDisplay()->print(this->_dateTime->getMinute("%02d"));
 }
 
 void Clockface::directionDecision(MapBlock nextBlk, bool moving_axis_x) {
