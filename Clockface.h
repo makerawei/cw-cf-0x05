@@ -18,6 +18,8 @@
 //sprites
 #include "pacman.h"
 
+#define SOUND_ALARM_CLOCK_URL "https://makerawei-1251006064.cos.ap-guangzhou.myqcloud.com/clockwise/pacman_alarm.wav"
+#define SOUND_BUTTON_CLICK_URL "https://makerawei-1251006064.cos.ap-guangzhou.myqcloud.com/clockwise/pacman_eat_bean.wav"
 
 // Simple coordinate struct for BFS
 struct Point {
@@ -115,7 +117,7 @@ class Clockface: public IClockface {
     void updateClock();
     const char* weekDayName(int weekday);
     const char* monthName(int month);
-    
+    void updateTime();
     
   public:
     Clockface(Adafruit_GFX* display);

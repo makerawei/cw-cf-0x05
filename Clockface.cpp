@@ -9,7 +9,7 @@ unsigned long lastMillisSec = 0;
 Pacman *pacman;
 
 Clockface::Clockface(Adafruit_GFX* display) : IClockface(display) {
-  
+  IClockface::alarmSetSoundUrl(SOUND_ALARM_CLOCK_URL);
 }
 
 void Clockface::setup(CWDateTime *dateTime) {
@@ -23,7 +23,6 @@ void Clockface::setup(CWDateTime *dateTime) {
 
 void Clockface::update()
 {
-  _dateTime->updateNTP();
   // Seconds blink  
   if ((millis() - lastMillisSec) >= 1000) {
     
@@ -97,8 +96,19 @@ const char* Clockface::monthName(int month) {
 }
 
 
+void Clockface::updateTime() {
+// 如果直接使用IClockface::updateTime();程序一定崩溃，很奇怪，在马里奥的表盘中不会崩溃。
+// 这里直接把父类的updateTime拷贝过来可以解决
+  _dateTime->updateNTP();
+  const int _alarmIndex = _dateTime->checkAlarm();
+  if(_alarmIndex >= 0) {
+    this->_alarmIndex = _alarmIndex;
+    alarmStarts();
+  }
+}
 
 void Clockface::updateClock() {
+    this->updateTime();
     Locator::getDisplay()->fillRect(14, 19, 36, 26, 0x0000);
 
     Locator::getDisplay()->setFont(&Picopixel);
